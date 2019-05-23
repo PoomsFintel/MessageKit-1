@@ -79,7 +79,11 @@ open class TextMessageCell: MessageContentCell {
             switch message.kind {
             case .text(let text), .emoji(let text):
                 let textColor = displayDelegate.textColor(for: message, at: indexPath, in: messagesCollectionView)
-                messageLabel.text = text
+                if text.contain("color") {
+                    messageLabel.setAttributedStringFromHTML(text) { _ in }
+                } else {
+                    messageLabel.text = text
+                }
                 messageLabel.textColor = textColor
                 if let font = messageLabel.messageLabelFont {
                     messageLabel.font = font
@@ -98,4 +102,24 @@ open class TextMessageCell: MessageContentCell {
         return messageLabel.handleGesture(touchPoint)
     }
 
+}
+
+extension UILabel {
+    
+    func setAttributedStringFromHTML(_ htmlCode: String, completionBlock: @escaping (NSAttributedString?) ->()) {
+        guard let data = htmlCode.data(using: String.Encoding.utf16) else {
+            print("Unable to decode data from html string: \(self)")
+            return completionBlock(nil)
+        }
+        DispatchQueue.main.async {
+            if let attributedString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil) {
+                self.attributedText = attributedString
+                completionBlock(attributedString)
+            } else {
+                print("Unable to create attributed string from html string: \(self)")
+                completionBlock(nil)
+            }
+        }
+    }
+    
 }
