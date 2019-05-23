@@ -79,7 +79,7 @@ open class TextMessageCell: MessageContentCell {
             switch message.kind {
             case .text(let text), .emoji(let text):
                 let textColor = displayDelegate.textColor(for: message, at: indexPath, in: messagesCollectionView)
-                if text.contain("color") {
+                if text.contains("color") {
                     messageLabel.setAttributedStringFromHTML(text) { _ in }
                 } else {
                     messageLabel.text = text
