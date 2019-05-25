@@ -83,10 +83,10 @@ open class TextMessageCell: MessageContentCell {
                     messageLabel.setAttributedStringFromHTML(text) { _ in }
                 } else {
                     messageLabel.text = text
-                }
-                messageLabel.textColor = textColor
-                if let font = messageLabel.messageLabelFont {
-                    messageLabel.font = font
+                    messageLabel.textColor = textColor
+                    if let font = messageLabel.messageLabelFont {
+                        messageLabel.font = font
+                    }
                 }
             case .attributedText(let text):
                 messageLabel.attributedText = text
