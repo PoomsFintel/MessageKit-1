@@ -80,7 +80,7 @@ open class TextMessageCell: MessageContentCell {
             case .text(let text), .emoji(let text):
                 let textColor = displayDelegate.textColor(for: message, at: indexPath, in: messagesCollectionView)
                 if text.contains("color") {
-                    messageLabel.setAttributedStringFromHTML(text) { _ in }
+                    messageLabel.setAttributedStringFromHTML(text, messageLabel.messageLabelFont) { _ in }
                 } else {
                     messageLabel.text = text
                     messageLabel.textColor = textColor
@@ -106,14 +106,15 @@ open class TextMessageCell: MessageContentCell {
 
 extension UILabel {
     
-    func setAttributedStringFromHTML(_ htmlCode: String, completionBlock: @escaping (NSAttributedString?) ->()) {
+    func setAttributedStringFromHTML(_ htmlCode: String, font: UIFont, completionBlock: @escaping (NSAttributedString?) ->()) {
         guard let data = htmlCode.data(using: String.Encoding.utf16) else {
             print("Unable to decode data from html string: \(self)")
             return completionBlock(nil)
         }
         DispatchQueue.main.async {
             if let attributedString = try? NSMutableAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil) {
-                attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont(name:"HelveticaNeue-Light", size:15.0)! , range: attributedString.string.fullrange() )
+                attributedString.removeAttribute(NSAttributedString.Key.font, range: attributedString.string.fullrange())
+                attributedString.addAttribute(NSAttributedString.Key.font, value: font ?? UIFont(name:"HelveticaNeue-Light", size:15.0)! , range: attributedString.string.fullrange() )
                 self.attributedText = attributedString
                 completionBlock(attributedString)
             } else {
