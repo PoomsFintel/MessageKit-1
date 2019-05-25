@@ -106,7 +106,7 @@ open class TextMessageCell: MessageContentCell {
 
 extension UILabel {
     
-    func setAttributedStringFromHTML(_ htmlCode: String, font: UIFont, completionBlock: @escaping (NSAttributedString?) ->()) {
+    func setAttributedStringFromHTML(_ htmlCode: String, _ font: UIFont, completionBlock: @escaping (NSAttributedString?) ->()) {
         guard let data = htmlCode.data(using: String.Encoding.utf16) else {
             print("Unable to decode data from html string: \(self)")
             return completionBlock(nil)
