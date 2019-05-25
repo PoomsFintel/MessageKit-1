@@ -81,7 +81,7 @@ open class TextMessageCell: MessageContentCell {
                 let textColor = displayDelegate.textColor(for: message, at: indexPath, in: messagesCollectionView)
                 if text.contains("color") {
                     messageLabel.setAttributedStringFromHTML(text, messageLabel.messageLabelFont) { _ in
-                        messageLabel.layoutIfNeeded()
+                        self.messageLabel.layoutIfNeeded()
                     }
                 } else {
                     messageLabel.text = text
