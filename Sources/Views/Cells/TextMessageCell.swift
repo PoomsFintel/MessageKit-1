@@ -80,7 +80,9 @@ open class TextMessageCell: MessageContentCell {
             case .text(let text), .emoji(let text):
                 let textColor = displayDelegate.textColor(for: message, at: indexPath, in: messagesCollectionView)
                 if text.contains("color") {
-                    messageLabel.setAttributedStringFromHTML(text, messageLabel.messageLabelFont) { _ in }
+                    messageLabel.setAttributedStringFromHTML(text, messageLabel.messageLabelFont) { _ in
+                        messageLabel.layoutIfNeeded()
+                    }
                 } else {
                     messageLabel.text = text
                     messageLabel.textColor = textColor
@@ -116,7 +118,6 @@ extension UILabel {
                 attributedString.removeAttribute(NSAttributedString.Key.font, range: attributedString.string.fullrange())
                 attributedString.addAttribute(NSAttributedString.Key.font, value: font ?? UIFont(name:"HelveticaNeue-Light", size:15.0)! , range: attributedString.string.fullrange() )
                 self.attributedText = attributedString
-                self.layoutIfNeeded()
                 completionBlock(attributedString)
             } else {
                 print("Unable to create attributed string from html string: \(self)")
