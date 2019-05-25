@@ -112,7 +112,7 @@ extension UILabel {
             return completionBlock(nil)
         }
         DispatchQueue.main.async {
-            if let attributedString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil) {
+            if let attributedString = try? NSMutableAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil) {
                 attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont(name:"HelveticaNeue-Light", size:15.0)! , range: attributedString.string.fullrange() )
                 self.attributedText = attributedString
                 completionBlock(attributedString)
@@ -126,6 +126,18 @@ extension UILabel {
 }
 
 extension String {
+    
+    static func className(_ aClass: AnyClass) -> String {
+        return NSStringFromClass(aClass).components(separatedBy: ".").last!
+    }
+    
+    func substring(_ from: Int) -> String {
+        return self.substring(from: self.characters.index(self.startIndex, offsetBy: from))
+    }
+    
+    var length: Int {
+        return self.characters.count
+    }
     
     func fullrange() -> NSRange {
         return NSMakeRange(0, self.length + self.countEmojiCharacter())
