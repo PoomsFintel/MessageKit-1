@@ -116,8 +116,7 @@ extension UILabel {
                 attributedString.removeAttribute(NSAttributedString.Key.font, range: attributedString.string.fullrange())
                 attributedString.addAttribute(NSAttributedString.Key.font, value: font ?? UIFont(name:"HelveticaNeue-Light", size:15.0)! , range: attributedString.string.fullrange() )
                 self.attributedText = attributedString
-                self.sizeToFit()
-                self.setNeedsDisplay()
+                self.layoutIfNeeded()
                 completionBlock(attributedString)
             } else {
                 print("Unable to create attributed string from html string: \(self)")
